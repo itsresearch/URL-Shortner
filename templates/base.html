@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}URL Shortener{% endblock %}</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f4f4f4;
+        color: #333;
+      }
+
+      nav {
+        background: #007bff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .nav-left a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        margin-right: 20px;
+      }
+
+      .nav-right a,
+      .nav-right button {
+        color: white;
+        text-decoration: none;
+        margin-left: 15px;
+        font-size: 14px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+
+      .nav-right a:hover,
+      .nav-right button:hover {
+        text-decoration: underline;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+
+      .message {
+        background: #d4edda;
+        color: #155724;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-left: 4px solid #28a745;
+      }
+
+      .card {
+        background: white;
+        padding: 20px;
+        border: 1px solid #ddd;
+      }
+
+      /* Form Styles */
+      input[type="text"],
+      input[type="password"],
+      input[type="email"],
+      input[type="url"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: Arial, sans-serif;
+      }
+
+      input[type="text"]:focus,
+      input[type="password"]:focus,
+      input[type="email"]:focus,
+      input[type="url"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin-right: 10px;
+        margin-top: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      button:hover {
+        background: #0056b3;
+      }
+
+      a.btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-right: 10px;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+
+      a.btn:hover {
+        background: #5a6268;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .error-text {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background: #f8f9fa;
+        font-weight: bold;
+      }
+
+      tr:hover {
+        background: #f5f5f5;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav>
+      <div class="nav-left">
+        <a href="{% url 'dashboard' %}">URL Shortener</a>
+      </div>
+
+      <div class="nav-right">
+        {% if user.is_authenticated %}
+        <a href="{% url 'create' %}">Create URL</a>
+
+        <form method="post" action="{% url 'logout' %}" style="display: inline">
+          {% csrf_token %}
+          <button type="submit">Logout ({{ user.username }})</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <div class="container">
+      {% if messages %} {% for message in messages %}
+      <div class="message">{{ message }}</div>
+      {% endfor %} {% endif %}
+
+      <div class="card">{% block content %}{% endblock %}</div>
+    </div>
+  </body>
+</html>

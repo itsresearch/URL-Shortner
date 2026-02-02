@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Create Short URL</h1>
+<form method="post">
+  {% csrf_token %} {% for field in form %}
+  <div class="form-group">
+    <label>{{ field.label }}</label>
+    {{ field }} {% if field.errors %}
+    <div class="error-text">{{ field.errors }}</div>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <button type="submit">Shorten URL</button>
+  <a href="{% url 'dashboard' %}" class="btn">Cancel</a>
+</form>
+{% endblock %}

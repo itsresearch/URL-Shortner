@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% block content %}
+
+<div
+  style="
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  "
+>
+  <h1 style="margin: 0">My Short URLs</h1>
+  <a href="{% url 'create' %}" class="btn">+ Create New</a>
+</div>
+
+{% if urls %}
+<table>
+  <thead>
+    <tr>
+      <th>Short URL</th>
+      <th>Original URL</th>
+      <th>Clicks</th>
+      <th>Created</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for url in urls %}
+    <tr>
+      <td>
+        <a href="{% url 'redirect' url.short_code %}" target="_blank">
+          {{ request.scheme }}://{{ request.get_host }}/{{ url.short_code }}/
+        </a>
+      </td>
+      <td>
+        <span title="{{ url.original_url }}">{{ url.original_url }}</span>
+      </td>
+      <td>{{ url.clicks }}</td>
+      <td>{{ url.created_at|date:"M d, Y" }}</td>
+      <td>
+        <a href="{% url 'edit' url.short_code %}" class="btn">Edit</a>
+        <a
+          href="{% url 'delete' url.short_code %}"
+          class="btn"
+          style="background: #dc3545"
+          >Delete</a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No short URLs yet. Create your first one!</p>
+<a href="{% url 'create' %}" class="btn">Create Short URL</a>
+{% endif %} {% endblock %}
